@@ -1,14 +1,47 @@
 #main.tf
-# Configure the AWS provider
-provider "aws" {
-  region = "us-east-1"
+variable "ingressrules" {
+    type = list(number)
+    default = [80,8080,22]
 }
 
-# Create an EC2 instance
-resource "aws_instance" "example" {
-  ami           = "ami-0f65671a86f061fcd"
+
+#resource block
+
+resource "aws_instance" "App_Server" {
+  ami           = "ami-0574da719dca65348"
   instance_type = "t2.micro"
+  security_groups = [aws_security_group.webtraffic.name]
+  key_name = "sample"
+  tags = {
+    Name = "AppServer"
+  }
 }
+
+resource "aws_security_group" "webtraffic" {
+
+
+  name = "Allow traffic"
+
+  dynamic "ingress" {
+      iterator = port
+      for_each = var.ingressrules
+      content {
+      from_port = port.value
+      to_port = port.value
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      }
+  }
+
+
+      egress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+      }
+  }
+
 
 #provider.tf
 terraform {
@@ -24,3 +57,5 @@ terraform {
 provider "aws" {
   region = "us-east-1"
 }
+export AWS_ACCESS_KEY_ID=AKIAZ26G6QSARA5ZWSSJ
+   export AWS_SECRET_ACCESS_KEY=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
