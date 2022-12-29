@@ -57,5 +57,5 @@ terraform {
 provider "aws" {
   region = "us-east-1"
 }
-export AWS_ACCESS_KEY_ID=AKIAZ26G6QSARA5ZWSSJ
-   export AWS_SECRET_ACCESS_KEY=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
+export AWS_ACCESS_KEY_ID=
+   export AWS_SECRET_ACCESS_KEY=
